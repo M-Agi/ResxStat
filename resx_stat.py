@@ -21,10 +21,11 @@ def create_stat(filename, table):
     for data in root.findall(utility.XML_DATA):
         value = data.find(utility.XML_VALUE)
         value_text = str(value.text.encode(encoding="utf-8", errors="ignore")).lower()
-        pattern = "[^a-zA-Z]+"
+        pattern = "[^a-zA-Z\s]+"
         value_text = re.sub(pattern, "", value_text)
         key_count += 1
-        words = value_text.split(" ")
+        #words = value_text.split(" ")
+        words = [x.strip() for x in value_text.split()]
         word_count += len(words)
         if max_character_count < len(value_text):
             max_character_count = len(value_text)
