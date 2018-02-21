@@ -19,7 +19,7 @@ def create_stat(filename, table):
     max_character_count = 0
     for data in root.findall(utility.XML_DATA):
         value = data.find(utility.XML_VALUE)
-        value_text = str(value)
+        value_text = str(value.text.encode(encoding="utf-8", errors="ignore")).lower()
         key_count += 1
         words = value_text.split(" ")
         word_count += len(words)
@@ -58,6 +58,7 @@ if len(sys.argv) != 2:
     print "Not enough argument added"
 else:
     table = []
+    global all_unique_words
     all_unique_words = set()
     if os.path.isdir(sys.argv[1]):
         for i in xrange(len(os.listdir(sys.argv[1]))):
