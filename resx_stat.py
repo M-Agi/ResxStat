@@ -11,7 +11,7 @@ directory = "Strings"
 lang_code = "en"
 
 
-def create_stat(filename, table):
+def create_stat(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
     all_words = set()
@@ -32,7 +32,8 @@ def create_stat(filename, table):
         all_words.update(words)
         all_unique_words.update(words)
     unique_count = len(all_words)
-    table.append([key_count, word_count, max_character_count, unique_count])
+    return [key_count, word_count, max_character_count, unique_count]
+ #   table.append([key_count, word_count, max_character_count, unique_count])
 #    print "keys: ", key_count
 #    print "Words: ", word_count
 #    print "Characters: ", max_character_count
@@ -62,12 +63,13 @@ else:
     global all_unique_words
     all_unique_words = set()
     if os.path.isdir(sys.argv[1]):
-        for i in xrange(len(os.listdir(sys.argv[1]))):
-            filenames = os.path.join(directory, lang_code, os.listdir(sys.argv[1])[i])
-            print filenames
-            create_stat(filenames, table)
-            print table[i]
+        for item in os.listdir(sys.argv[1]):
+            filename = os.path.join(directory, lang_code, item)
+            stat = create_stat(filename)
+            table.append(stat)
+            print filename
+            print stat
         create_global_stat(table)
     else:
         filename = utility.prep_resx_name(directory, lang_code, sys.argv[1])
-        create_stat(filename, table)
+        table.append(create_stat(filename,))
