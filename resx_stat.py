@@ -2,6 +2,7 @@ import sys
 import os
 import utility
 import xml.etree.ElementTree as ET
+import re
 
 # resx_stat.py en -> String/en/*.resx
 # resx_stat.py Item -> String/en/Item.resx
@@ -20,6 +21,8 @@ def create_stat(filename, table):
     for data in root.findall(utility.XML_DATA):
         value = data.find(utility.XML_VALUE)
         value_text = str(value.text.encode(encoding="utf-8", errors="ignore")).lower()
+        pattern = "[^a-zA-Z]+"
+        value_text = re.sub(pattern, "", value_text)
         key_count += 1
         words = value_text.split(" ")
         word_count += len(words)
@@ -35,12 +38,10 @@ def create_stat(filename, table):
 #    print "Unique Words: ", unique_count
 
 
-
 def create_global_stat(table):
     all_key_count = 0
     all_word_count = 0
     global_max_character_count = 0
-    global_unique_count = 0
     for item in table:
         all_key_count += item[0]
         all_word_count += item[1]
@@ -48,10 +49,9 @@ def create_global_stat(table):
             global_max_character_count = item[2]
     global_unique_count = len(all_unique_words)
     print "global keys: ", all_key_count
-    print "gloabl words: ", all_word_count
+    print "global words: ", all_word_count
     print "global max characters: ", global_max_character_count
     print "global unique Words: ", global_unique_count
-
 
 
 if len(sys.argv) != 2:
