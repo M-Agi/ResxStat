@@ -72,4 +72,4 @@ else:
         create_global_stat(table)
     else:
         filename = utility.prep_resx_name(directory, lang_code, sys.argv[1])
-        table.append(create_stat(filename,))
+        table.append(create_stat(filename))
