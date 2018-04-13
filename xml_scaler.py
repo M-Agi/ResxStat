@@ -6,10 +6,16 @@ import re
 pattern = "\d+"
 SCALE = 4
 
+def all_scaler(node):
+	if re.match(pattern, node.text)
+		node.text = str(int(node.text) * SCALE)
+	elif len(list(node)) != 0:
+		for kid in node:
+			all_scaler(kid)
 
 
 def parse_xml(filename):
-    pass
+    #pass
     tree = ET.parse(filename)
     root = tree.getroot()
     for child in root:
@@ -20,10 +26,11 @@ def parse_xml(filename):
         elif child.tag in ("SpriteTable", "AnimationTable", "NinePatchTable"):
             for item in child:
                 if item.tag == "Overwrite":
+                    all_scaler(item)
+    return tree
 
-
-
-
+def write_xml(tree, output):
+    pass
 
 if len(sys.argv) != 2:
     print "Not enough argument added"
@@ -33,6 +40,7 @@ else:
         print "The added parameter is a directory give a file"
     else:
         outputFilename = inputFilename.result
-        parse_xml(inputFilename)
+        parsed_tree = parse_xml(inputFilename)
+        write_xml(parsed_tree, outputFilename)
 
 
