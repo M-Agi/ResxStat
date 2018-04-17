@@ -25,8 +25,10 @@ def parse_xml(filename):
                     item.text = str(int(item.text) * SCALE)
         elif child.tag in ("SpriteTable", "AnimationTable", "NinePatchTable"):
             for item in child:
-                if item.tag == "Overwrite":
-                    all_scaler(item)
+                if item.tag == "Entry":
+                    for kid in item:
+                        if str(kid.tag) == "Overwrite":
+                            all_scaler(kid)
     return tree
 
 def write_xml(tree, output):
