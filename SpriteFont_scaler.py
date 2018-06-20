@@ -19,22 +19,27 @@ def process_property_list(node):
 
 
 def process_property_glyph(node):
-    pass
+    new_height = int(node.attrib['advance']) * SCALE
+    node.attrib['advance'] = str(new_height)
+    process_property_list(node)
 
 
-def process_xml(filename):
-    tree = ET.parse(filename)
-    root = tree.getroot()
-    for child in root:
+def find_all_child(node):
+    for child in node:
         if child.tag == "PlaceholderGlyph":
             process_property_list(child)
         elif child.text.isdigit():
             scale_node_text(child)
         elif child.tag == "Glyph":
             process_property_glyph(child)
-        elif false:
-            # todo attrib
-            pass
+        find_all_child(child)
+
+def process_xml(filename):
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    new_height = int(root.attrib['height']) *SCALE
+    root.attrib['height'] = str(new_height)
+    find_all_child(root)
     return tree
 
 
