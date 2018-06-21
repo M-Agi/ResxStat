@@ -9,18 +9,23 @@ def scale_node_text(node):
     node.text = str(int(node.text) * SCALE)
 
 
+def scale_node_attrib(node, attrib):
+    node.attrib[attrib] = str(int(node.attrib[attrib]) * SCALE)
+
+
+def generate_scaled_list(normal_list):
+    for item in normal_list:
+        yield str(int(item) * SCALE)
+
+
 def process_property_list(node):
-    node_text_list = node.text.split()
-    scaled_node_text_list = []
-    for item in node_text_list:
-        scaled_node_text_list.append((str(int(item) * SCALE)))
-    scaled_node_text = ' '.join(scaled_node_text_list)
-    node.text = scaled_node_text
+    node.text = ' '.join(generate_scaled_list(node.text.split()))
+    #node.text = ' '.join(str(int(x) * SCALE) for x in node.text.split())
+    #node.text = ' '.join(map(lambda x: str(int(x) * SCALE), node.text.split()))
 
 
 def process_property_glyph(node):
-    new_height = int(node.attrib['advance']) * SCALE
-    node.attrib['advance'] = str(new_height)
+    scale_node_attrib(node, 'advance')
     process_property_list(node)
 
 
@@ -34,11 +39,11 @@ def find_all_child(node):
             process_property_glyph(child)
         find_all_child(child)
 
+
 def process_xml(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
-    new_height = int(root.attrib['height']) *SCALE
-    root.attrib['height'] = str(new_height)
+    scale_node_attrib(root, 'height')
     find_all_child(root)
     return tree
 
